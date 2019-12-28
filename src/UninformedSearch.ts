@@ -1,17 +1,17 @@
-import { NodeE } from "./Node";
+import { NodeA } from "./Node";
 
 export class UninformedSearch {
   constructor() {}
 
   bfs(
-    e: NodeE
+    e: NodeA
   ): {
-    path: Array<NodeE>;
-    generatedNodes: Array<NodeE>;
+    path: Array<NodeA>;
+    generatedNodes: Array<NodeA>;
   } {
-    let path: Array<NodeE> = new Array();
-    let open: Array<NodeE> = new Array();
-    let closed: Array<NodeE> = new Array();
+    let path: Array<NodeA> = new Array();
+    let open: Array<NodeA> = new Array();
+    let closed: Array<NodeA> = new Array();
 
     open.push(e);
     let goal = false;
@@ -44,7 +44,7 @@ export class UninformedSearch {
     };
   }
 
-  pathTrace(path: Array<NodeE>, n: NodeE): void {
+  pathTrace(path: Array<NodeA>, n: NodeA): void {
     let current = n;
     path.push(current);
 
@@ -54,10 +54,10 @@ export class UninformedSearch {
     }
   }
 
-  contains(list: Array<NodeE>, n: NodeE): boolean {
+  contains(list: Array<NodeA>, n: NodeA): boolean {
     let c = false;
     for (let index = 0; index < list.length; index++) {
-      if (list[index].isSamePuzzle(n.puzzle)) {
+      if (list[index].isSame(n)) {
         c = true;
       }
     }
