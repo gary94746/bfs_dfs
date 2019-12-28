@@ -1,6 +1,7 @@
 import { UninformedSearch } from "./UninformedSearch";
 import * as fs from "fs";
 import { NodePuzzle8 } from "./nodes/Puzzle8";
+import { ExportData } from "./ExportData";
 
 let initial: number[] = JSON.parse(
   fs.readFileSync("/home/gary94746/Documents/BFS/input.json", "utf-8")
@@ -8,7 +9,7 @@ let initial: number[] = JSON.parse(
 
 let root = new NodePuzzle8(initial);
 let ui = new UninformedSearch();
-let { path, generatedNodes } = ui.bfs(root);
+let { path, generatedNodes, idGoalNode } = ui.bfs(root);
 
 if (path.length > 0) {
   // print path
@@ -17,34 +18,8 @@ if (path.length > 0) {
   }
 
   // "arr": [3, 1, 2, 0, 6, 4, 7, 8, 5]
-
-  // with generated nodes
-  const forGraph: {
-    id: number;
-    parent: number | undefined;
-    name: string;
-  }[] = [];
-
-  generatedNodes.forEach(e => {
-    forGraph.push({
-      id: e.id,
-      parent: e.parent?.id,
-      name: e.getName()
-    });
-  });
-
-  forGraph.push({
-    id: path[0].id,
-    parent: path[0].parent?.id,
-    name: path[0].getName()
-  });
-
-  const exportedData = forGraph.filter(
-    (thing, index, self) =>
-      index === self.findIndex(t => t.id === thing.id && t.id === thing.id)
-  );
-
-  fs.writeFileSync("./out.json", JSON.stringify(exportedData));
+  const exported = new ExportData(generatedNodes, path[0], idGoalNode);
+  exported.toJSON("./out.json");
 } else {
   console.log("No solved");
 }

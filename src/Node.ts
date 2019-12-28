@@ -17,6 +17,4 @@ export abstract class NodeA {
   abstract getName(): string;
 
   abstract getRawName(): string;
-
-  abstract getParentRawName(): string;
 }

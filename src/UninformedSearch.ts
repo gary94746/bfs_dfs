@@ -9,10 +9,12 @@ export class UninformedSearch {
   ): {
     path: Array<NodeA>;
     generatedNodes: Array<NodeA>;
+    idGoalNode: number;
   } {
     let path: Array<NodeA> = new Array();
     let open: Array<NodeA> = new Array();
     let closed: Array<NodeA> = new Array();
+    let idGoalNode = 0;
 
     //
     rootNode.id = this.autoID++;
@@ -33,6 +35,7 @@ export class UninformedSearch {
         //
         if (currentChild.goalState()) {
           goal = true;
+          idGoalNode = currentChild.id;
           this.pathTrace(path, currentChild);
         }
         // if (
@@ -46,7 +49,8 @@ export class UninformedSearch {
 
     return {
       path,
-      generatedNodes: [...open, ...closed]
+      generatedNodes: [...open, ...closed],
+      idGoalNode
     };
   }
 

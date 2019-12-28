@@ -66,10 +66,6 @@ export class NodePuzzle8 extends NodeA {
     return JSON.stringify(this.puzzle);
   }
 
-  getParentRawName(): string {
-    return this.parent == undefined ? "" : this.parent.getRawName();
-  }
-
   setPuzzle(p: number[]) {
     for (let i = 0; i < p.length; i++) this.puzzle[i] = p[i];
   }
