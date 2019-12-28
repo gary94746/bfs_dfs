@@ -39,7 +39,12 @@ if (path.length > 0) {
     name: path[0].getName()
   });
 
-  fs.writeFileSync("./out.json", JSON.stringify(forGraph));
+  const exportedData = forGraph.filter(
+    (thing, index, self) =>
+      index === self.findIndex(t => t.id === thing.id && t.id === thing.id)
+  );
+
+  fs.writeFileSync("./out.json", JSON.stringify(exportedData));
 } else {
   console.log("No solved");
 }
