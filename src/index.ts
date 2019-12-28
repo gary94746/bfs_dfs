@@ -16,20 +16,26 @@ if (path.length > 0) {
     path[index].printNode();
   }
 
+  // "arr": [3, 1, 2, 0, 6, 4, 7, 8, 5]
+
   // with generated nodes
-  const forGraph: { id: string; parent: string; name: string }[] = [];
+  const forGraph: {
+    id: number;
+    parent: number | undefined;
+    name: string;
+  }[] = [];
 
   generatedNodes.forEach(e => {
     forGraph.push({
-      id: e.getRawName(),
-      parent: e.getParentRawName(),
+      id: e.id,
+      parent: e.parent?.id,
       name: e.getName()
     });
   });
 
   forGraph.push({
-    id: path[0].getRawName(),
-    parent: path[0].getParentRawName(),
+    id: path[0].id,
+    parent: path[0].parent?.id,
     name: path[0].getName()
   });
 

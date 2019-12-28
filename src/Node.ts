@@ -2,6 +2,7 @@ export abstract class NodeA {
   children: Array<NodeA> = new Array();
   parent: NodeA | undefined;
   specificProperty: any;
+  id: number = 0;
 
   abstract expandMove(): void;
 

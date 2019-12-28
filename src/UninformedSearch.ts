@@ -1,10 +1,11 @@
 import { NodeA } from "./Node";
 
 export class UninformedSearch {
+  autoID: number = 1;
   constructor() {}
 
   bfs(
-    e: NodeA
+    rootNode: NodeA
   ): {
     path: Array<NodeA>;
     generatedNodes: Array<NodeA>;
@@ -13,7 +14,9 @@ export class UninformedSearch {
     let open: Array<NodeA> = new Array();
     let closed: Array<NodeA> = new Array();
 
-    open.push(e);
+    //
+    rootNode.id = this.autoID++;
+    open.push(rootNode);
     let goal = false;
 
     while (open.length > 0 && !goal) {
@@ -25,16 +28,19 @@ export class UninformedSearch {
 
       for (let index = 0; index < current.children.length; index++) {
         let currentChild = current.children[index];
+        // asign id
+        currentChild.id = this.autoID++;
+        //
         if (currentChild.goalState()) {
           goal = true;
           this.pathTrace(path, currentChild);
         }
-        if (
-          !this.contains(open, currentChild) &&
-          !this.contains(closed, currentChild)
-        ) {
-          open.push(currentChild);
-        }
+        // if (
+        // !this.contains(open, currentChild) &&
+        // !this.contains(closed, currentChild)
+        // ) {
+        open.push(currentChild);
+        // }
       }
     }
 

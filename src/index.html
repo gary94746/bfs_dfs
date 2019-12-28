@@ -30,7 +30,7 @@
           type: "tree",
           options: {
             link: {
-              aspect: "line"
+              aspect: "arc"
             },
             node: {
               type: "circle",
@@ -49,10 +49,9 @@
         zingchart.render({
           id: "myChart",
           data: chartConfig,
-          height: "30%",
+          height: "100%",
           output: "canvas",
-          autoResize: true,
-          X: 90
+          autoResize: true
         });
       });
     </script>
