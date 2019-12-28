@@ -30,7 +30,7 @@
           type: "tree",
           options: {
             link: {
-              aspect: "line"
+              aspect: "arc"
             },
             node: {
               type: "circle",
@@ -43,8 +43,12 @@
                 borderAlpha: 1
               }
             },
-            "node['cls-expected']": {
-              backgroundColor: "red"
+            "node[cls-expected]": {
+              type: "star6",
+              borderWidth: 0.5,
+              size: 4,
+              borderColor: "#000",
+              backgroundColor: "white"
             },
             progression: 0,
             textAttr: "name",

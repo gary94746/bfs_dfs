@@ -9,7 +9,7 @@ let initial: number[] = JSON.parse(
 
 let root = new NodePuzzle8(initial);
 let ui = new UninformedSearch();
-let { path, generatedNodes, idGoalNode } = ui.bfs(root);
+let { path, generatedNodes } = ui.bfs(root);
 
 if (path.length > 0) {
   // print path
@@ -18,7 +18,7 @@ if (path.length > 0) {
   }
 
   // "arr": [3, 1, 2, 0, 6, 4, 7, 8, 5]
-  const exported = new ExportData(generatedNodes, path[0], idGoalNode);
+  const exported = new ExportData([...generatedNodes, path[0]]);
   exported.toJSON("./out.json");
 } else {
   console.log("No solved");

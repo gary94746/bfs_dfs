@@ -4,41 +4,32 @@ import * as fs from "fs";
 export class ExportData {
   forGraph: ForGraph[] = new Array();
 
-  constructor(
-    generatedNodes: Array<NodeA>,
-    rootNode: NodeA,
-    idGoalNode: number
-  ) {
+  constructor(generatedNodes: Array<NodeA>) {
     generatedNodes.forEach(e => {
       this.forGraph.push(
         new ForGraph(e.id, e.parent?.id, e.getRawName(), e.getName())
       );
     });
 
-    this.forGraph.push(
-      new ForGraph(
-        rootNode.id,
-        rootNode.parent?.id,
-        rootNode.getRawName(),
-        rootNode.getName()
-      )
-    );
-
-    // for extra css
-    const finded = this.forGraph.find(a => (a.id = idGoalNode));
-    if (finded != undefined) {
-      const indexNode = this.forGraph.indexOf(finded);
-      this.forGraph[indexNode].cls = "expected";
-    }
+    this.forGraph[this.forGraph.length - 1].cls = "expected";
   }
 
   toJSON(path: string) {
-    const exportedData = this.forGraph.filter(
-      (node, index, self) =>
-        index === self.findIndex(t => t.id === node.id && t.id === node.id)
-    );
+    fs.writeFileSync(path, JSON.stringify(this.forGraph));
+  }
 
-    fs.writeFileSync(path, JSON.stringify(exportedData));
+  getUnique(arr: any, comp: any) {
+    const unique = arr
+      .map((e: any) => e[comp])
+
+      // store the keys of the unique objects
+      .map((e: any, i: any, final: any) => final.indexOf(e) === i && i)
+
+      // eliminate the dead keys & store unique objects
+      .filter((e: any) => arr[e])
+      .map((e: any) => arr[e]);
+
+    return unique;
   }
 }
 

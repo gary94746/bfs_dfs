@@ -9,7 +9,6 @@ export class UninformedSearch {
   ): {
     path: Array<NodeA>;
     generatedNodes: Array<NodeA>;
-    idGoalNode: number;
   } {
     let path: Array<NodeA> = new Array();
     let open: Array<NodeA> = new Array();
@@ -35,22 +34,21 @@ export class UninformedSearch {
         //
         if (currentChild.goalState()) {
           goal = true;
-          idGoalNode = currentChild.id;
           this.pathTrace(path, currentChild);
+        } else {
+          // if (
+          // !this.contains(open, currentChild) &&
+          // !this.contains(closed, currentChild)
+          // ) {
+          open.push(currentChild);
+          // }
         }
-        // if (
-        // !this.contains(open, currentChild) &&
-        // !this.contains(closed, currentChild)
-        // ) {
-        open.push(currentChild);
-        // }
       }
     }
 
     return {
       path,
-      generatedNodes: [...open, ...closed],
-      idGoalNode
+      generatedNodes: [...open, ...closed]
     };
   }
 
