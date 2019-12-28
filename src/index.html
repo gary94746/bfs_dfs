@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ZingSoft Demo</title>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script>
+      zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    </script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/374756/people.js"></script>
+  </head>
+
+  <body>
+    <div id="myChart" class="chart--container">
+      <a class="zc-ref" href="https://www.zingchart.com/">BFS</a>
+    </div>
+    <script>
+      ZC.LICENSE = [
+        "569d52cefae586f634c54f86dc99e6a9",
+        "b55b025e438fa8a98e32482b5f768ff5"
+      ];
+      window.addEventListener("load", async () => {
+        let chartData = await $.getJSON(
+          "/home/gary94746/Documents/BFS/out.json"
+        );
+        console.log(chartData);
+
+        let chartConfig = {
+          type: "tree",
+          options: {
+            link: {
+              aspect: "line"
+            },
+            node: {
+              type: "circle",
+              borderWidth: "2px",
+              label: {
+                width: "100px"
+              }
+            },
+            progression: 0,
+            textAttr: "name",
+            valueAttr: "value"
+          },
+          series: chartData
+        };
+
+        zingchart.render({
+          id: "myChart",
+          data: chartConfig,
+          height: "30%",
+          output: "canvas",
+          autoResize: true,
+          X: 90
+        });
+      });
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .chart--container {
+        min-height: 150px;
+        overflow: auto;
+        position: relative;
+        width: 100%;
+        height: 900px;
+      }
+
+      #myChart {
+        width: 100%;
+        height: 2600px;
+      }
+
+      .zc-ref {
+        display: none;
+      }
+
+      zing-grid[loading] {
+        height: 2600px;
+      }
+    </style>
+  </body>
+</html>
