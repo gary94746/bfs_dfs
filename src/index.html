@@ -21,10 +21,9 @@
         "b55b025e438fa8a98e32482b5f768ff5"
       ];
       window.addEventListener("load", async () => {
-        let chartData = await $.getJSON(
+        let generatedNodes = await $.getJSON(
           "/home/gary94746/Documents/BFS/out.json"
         );
-        console.log(chartData);
 
         let chartConfig = {
           type: "tree",
@@ -44,17 +43,27 @@
               }
             },
             "node[cls-expected]": {
-              type: "star6",
-              borderWidth: 0.5,
-              size: 4,
+              type: "square",
+              borderWidth: 2,
+              size: 6,
               borderColor: "#000",
-              backgroundColor: "white"
+              backgroundColor: "black",
+              hoverState: {
+                borderWidth: 1,
+                borderColor: "#000",
+                borderAlpha: 1,
+                backgroundColor: "white"
+              }
+            },
+            link: {
+              lineWidth: 2,
+              lineColor: "grey"
             },
             progression: 0,
             textAttr: "name",
             value: "value"
           },
-          series: chartData
+          series: generatedNodes
         };
 
         zingchart.render({

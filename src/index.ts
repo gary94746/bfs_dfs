@@ -18,7 +18,7 @@ if (path.length > 0) {
   }
 
   // "arr": [3, 1, 2, 0, 6, 4, 7, 8, 5]
-  const exported = new ExportData([...generatedNodes, path[0]]);
+  const exported = new ExportData([...generatedNodes, path[0]], path);
   exported.toJSON("./out.json");
 } else {
   console.log("No solved");
