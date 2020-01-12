@@ -1,33 +1,27 @@
 import { NodeA } from "./Node";
-import * as fs from "fs";
 
-export class ExportData {
-  forGraph: ForGraph[] = new Array();
+export const parseData = (generatedNodes: Array<NodeA>, path: Array<NodeA>) => {
 
-  constructor(generatedNodes: Array<NodeA>, private path: Array<NodeA>) {
-    // push every generated node in forGraph, create instance
-    generatedNodes.forEach(e => {
-      this.forGraph.push(new ForGraph(e.id, e.parent?.id, e.getName()));
-    });
+  const toExport: ForGraph[] = generatedNodes.map(e => {
+    return {
+      id: e.id,
+      parent: e.parent?.id,
+      name: e.getName()
+    };
+  })
 
-    // for path, apply different style
-    this.path.forEach(e => {
-      const index = this.forGraph.findIndex(f => f.id == e.id);
-      this.forGraph[index].cls = "expected";
-    });
-  }
+  path.forEach(e => {
+    const index = toExport.findIndex(f => f.id == e.id);
+    if (index != -1)
+      toExport[index].cls = "expected";
+  })
 
-  toJSON(path: string) {
-    // write in file
-    fs.writeFileSync(path, JSON.stringify(this.forGraph));
-  }
+  return toExport;
 }
 
-class ForGraph {
-  constructor(
-    public id: number,
-    public parent: number | undefined,
-    public name: string,
-    public cls?: string
-  ) {}
+export type ForGraph = {
+  id: number,
+  parent: number | undefined,
+  name: string,
+  cls?: string
 }

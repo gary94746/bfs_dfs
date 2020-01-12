@@ -1,25 +1,39 @@
 import { UninformedSearch } from "./UninformedSearch";
 import * as fs from "fs";
 import { NodePuzzle8 } from "./nodes/Puzzle8";
-import { ExportData } from "./ExportData";
+import { parseData, ForGraph } from "./ExportData";
+import { NodeA } from "./Node";
 
-let initial: number[] = JSON.parse(
-  fs.readFileSync("/home/gary94746/Documents/BFS/input.json", "utf-8")
-).arr;
-
-let root = new NodePuzzle8(initial);
-let ui = new UninformedSearch();
-let { path, generatedNodes } = ui.bfs(root);
-
-if (path.length > 0) {
-  // print path
-  for (let index = path.length - 1; index > -1; index--) {
-    path[index].printNode();
-  }
-
-  // "arr": [3, 1, 2, 0, 6, 4, 7, 8, 5]
-  const exported = new ExportData([...generatedNodes, path[0]], path);
-  exported.toJSON("./out.json");
-} else {
-  console.log("No solved");
+const readFromFile = (path: string) => {
+  return JSON.parse(
+    fs.readFileSync(path, "utf-8")
+  );
 }
+
+const writeToFile = (path: string, data: ForGraph[]) => {
+  fs.writeFileSync(path, JSON.stringify(data));
+}
+
+const printPath = (path: NodeA[], index = path.length - 1) => {
+  if (index > -1) {
+    path[index].printNode();
+    printPath(path, index - 1);
+  } else {
+    return;
+  }
+}
+
+const exportData = (generatedNodes: NodeA[], initialElement: NodeA, path: NodeA[]) => {
+  const exported = parseData([...generatedNodes, initialElement], path)
+  writeToFile("out.json", exported);
+}
+
+
+const { rootData } = readFromFile("input.json");
+const root = new NodePuzzle8(rootData);
+const ui = new UninformedSearch();
+const { path, generatedNodes } = ui.bfs(root);
+
+
+printPath(path);
+exportData(generatedNodes, path[0], path);

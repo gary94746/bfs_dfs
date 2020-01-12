@@ -1,5 +1,5 @@
 {
-  "name": "BFS",
+  "name": "nodes",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,8 @@
     "@types/node": "^13.1.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node out/Index.js"
   },
   "keywords": [],
   "author": "",
