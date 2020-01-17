@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { NodePuzzle8 } from "./nodes/Puzzle8";
 import { parseData, ForGraph } from "./ExportData";
 import { NodeA } from "./Node";
+import * as _ from "lodash";
 
 const readFromFile = (path: string) => {
   return JSON.parse(
