@@ -9,8 +9,6 @@ export abstract class NodeA {
 
   abstract isSame(node: NodeA): boolean;
 
-  abstract clone(currentState: any): void;
-
   abstract goalState(): boolean;
 
   abstract getName(): string;

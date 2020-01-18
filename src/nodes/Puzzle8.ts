@@ -1,48 +1,41 @@
 import { NodeA } from "../Node";
+import * as _ from "lodash";
 
 export class NodePuzzle8 extends NodeA {
   // properties of this especific node
   zeroPosition: number = 0;
   readonly col: number = 3;
+  canMoveToRight: boolean;
+  canMoveToLeft: boolean;
+  canMoveToDown: boolean;
+  canMoveToUp: boolean;
 
   constructor(private currentState: number[], private finalState: number[]) {
     super();
+
+    this.zeroPosition = this.currentState.findIndex(e => e === 0);
+
+    this.canMoveToRight = this.zeroPosition % this.col < this.col - 1;
+    this.canMoveToLeft = this.zeroPosition % this.col > 0;
+    this.canMoveToDown = this.zeroPosition + this.col < this.currentState.length;
+    this.canMoveToUp = this.zeroPosition - this.col >= 0;
   }
 
   expandMove(): void {
-    this.currentState.forEach((element, index) => {
-      if (element === 0)
-        this.zeroPosition = index;
+    const same = this.change(this.currentState, this.zeroPosition);
+
+    const toR = same(1, this.canMoveToRight);
+    const toL = same(-1, this.canMoveToLeft);
+    const toDown = same(3, this.canMoveToDown);
+    const toUp = same(-3, this.canMoveToUp);
+
+    [toR, toL, toDown, toUp].forEach(e => {
+      if (e.length > 0) {
+        const newChild = new NodePuzzle8(e, this.finalState);
+        newChild.parent = this;
+        this.children.push(newChild);
+      }
     });
-
-    this.moveToR(this.currentState, this.zeroPosition);
-    this.moveToL(this.currentState, this.zeroPosition);
-    this.moveToUp(this.currentState, this.zeroPosition);
-    this.moveToDown(this.currentState, this.zeroPosition);
-  }
-
-  moveToR(p: number[], i: number) {
-    const canMoveToR = i % this.col < this.col - 1;
-    this.changeZeroPosition(p, canMoveToR, i + 1, i);
-  }
-
-  moveToL(p: number[], i: number) {
-    const canMoveToL = i % this.col > 0;
-    this.changeZeroPosition(p, canMoveToL, i - 1, i);
-  }
-
-  moveToUp(p: number[], i: number) {
-    const canMoveToUp = i - this.col >= 0;
-    this.changeZeroPosition(p, canMoveToUp, i - 3, i);
-  }
-
-  moveToDown(p: number[], i: number) {
-    const canMoveToD = i + this.col < this.currentState.length;
-    this.changeZeroPosition(p, canMoveToD, i + 3, i);
-  }
-
-  clone(a: number[]): number[] {
-    return [...a];
   }
 
   printNode(): void {
@@ -74,17 +67,18 @@ export class NodePuzzle8 extends NodeA {
     return JSON.stringify(this.currentState);
   }
 
-  changeZeroPosition(currentPuzzle: number[], condition: boolean, step: number, zeroPosition: number) {
-    if (condition) {
-      const cloneOfCurrent = this.clone(currentPuzzle);
+  change(currentPuzzle: number[], zeroPosition: number) {
+    return (step: number, condition: boolean, stepSize = zeroPosition + step) => {
+      if (condition) {
+        const cloneOfCurrent = [...currentPuzzle];
+        const temp = cloneOfCurrent[stepSize];
+        cloneOfCurrent[stepSize] = cloneOfCurrent[zeroPosition];
+        cloneOfCurrent[zeroPosition] = temp;
 
-      const temp = cloneOfCurrent[step];
-      cloneOfCurrent[step] = cloneOfCurrent[zeroPosition];
-      cloneOfCurrent[zeroPosition] = temp;
-
-      const node = new NodePuzzle8(cloneOfCurrent, this.finalState);
-      node.parent = this;
-      this.children.push(node);
+        return cloneOfCurrent;
+      } else {
+        return [];
+      }
     }
   }
 }
