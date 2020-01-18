@@ -30,8 +30,8 @@ const exportData = (generatedNodes: NodeA[], initialElement: NodeA, path: NodeA[
 }
 
 
-const { rootData } = readFromFile("input.json");
-const root = new NodePuzzle8(rootData);
+const { initialState, finalState } = readFromFile("input.json");
+const root = new NodePuzzle8(initialState, finalState);
 const ui = new UninformedSearch();
 const { path, generatedNodes } = ui.bfs(root);
 

@@ -2,27 +2,47 @@ import { NodeA } from "../Node";
 
 export class NodePuzzle8 extends NodeA {
   // properties of this especific node
-  puzzle: number[] = [];
-  x: number = 0;
+  currentState: number[] = [];
+  zeroPosition: number = 0;
   col: number = 3;
 
-  constructor(puzzle: number[]) {
+  constructor(initialState: number[], private finalState: number[]) {
     super();
-    this.setPuzzle(puzzle);
+    this.setPuzzle(initialState);
   }
 
   expandMove(): void {
-    for (let i = 0; i < this.puzzle.length; i++) {
-      if (this.puzzle[i] == 0) {
-        this.x = i;
-      }
-    }
+    this.currentState.forEach((element, index) => {
+      if (element === 0)
+        this.zeroPosition = index;
+    });
 
-    this.moveToR(this.puzzle, this.x);
-    this.moveToL(this.puzzle, this.x);
-    this.moveToUp(this.puzzle, this.x);
-    this.moveToDown(this.puzzle, this.x);
+    this.moveToR(this.currentState, this.zeroPosition);
+    this.moveToL(this.currentState, this.zeroPosition);
+    this.moveToUp(this.currentState, this.zeroPosition);
+    this.moveToDown(this.currentState, this.zeroPosition);
   }
+
+  moveToR(p: number[], i: number) {
+    const canMoveToR = i % this.col < this.col - 1;
+    this.changeZeroPosition(p, canMoveToR, i + 1, i);
+  }
+
+  moveToL(p: number[], i: number) {
+    const canMoveToL = i % this.col > 0;
+    this.changeZeroPosition(p, canMoveToL, i - 1, i);
+  }
+
+  moveToUp(p: number[], i: number) {
+    const canMoveToUp = i - this.col >= 0;
+    this.changeZeroPosition(p, canMoveToUp, i - 3, i);
+  }
+
+  moveToDown(p: number[], i: number) {
+    const canMoveToD = i + this.col < this.currentState.length;
+    this.changeZeroPosition(p, canMoveToD, i + 3, i);
+  }
+
 
   copy(a: any, b: any): void {
     for (let i = 0; i < b.length; i++) a[i] = b[i];
@@ -35,98 +55,44 @@ export class NodePuzzle8 extends NodeA {
   isSame(p: NodeA): boolean {
     let same = true;
 
-    for (let index = 0; index < (p as NodePuzzle8).puzzle.length; index++) {
-      if (this.puzzle[index] != (p as NodePuzzle8).puzzle[index]) same = false;
+    for (let index = 0; index < (p as NodePuzzle8).currentState.length; index++) {
+      if (this.currentState[index] != (p as NodePuzzle8).currentState[index]) same = false;
     }
     return same;
   }
 
   goalState(): boolean {
-    let isGoal = true;
-    let m = this.puzzle[0];
-    for (let index = 0; index < this.puzzle.length; index++) {
-      if (m > this.puzzle[index]) {
-        isGoal = false;
-      }
-      m = this.puzzle[index];
-    }
-
-    return isGoal;
+    return JSON.stringify(this.currentState) === JSON.stringify(this.finalState);
   }
 
   getName(): string {
     return `
-    ${this.puzzle[0]} ${this.puzzle[1]} ${this.puzzle[2]}
-    ${this.puzzle[3]} ${this.puzzle[4]} ${this.puzzle[5]}
-    ${this.puzzle[6]} ${this.puzzle[7]} ${this.puzzle[8]}
+    ${this.currentState[0]} ${this.currentState[1]} ${this.currentState[2]}
+    ${this.currentState[3]} ${this.currentState[4]} ${this.currentState[5]}
+    ${this.currentState[6]} ${this.currentState[7]} ${this.currentState[8]}
     `;
   }
 
   getRawName(): string {
-    return JSON.stringify(this.puzzle);
+    return JSON.stringify(this.currentState);
   }
 
   setPuzzle(p: number[]) {
-    for (let i = 0; i < p.length; i++) this.puzzle[i] = p[i];
+    for (let i = 0; i < p.length; i++) this.currentState[i] = p[i];
   }
 
-  moveToR(p: number[], i: number) {
-    if (i % this.col < this.col - 1) {
-      let pc: number[] = [];
-      this.copy(pc, p);
+  changeZeroPosition(currentPuzzle: number[], condition: boolean, step: number, zeroPosition: number) {
+    if (condition) {
+      const cloneOfCurrent: number[] = [];
+      this.copy(cloneOfCurrent, currentPuzzle);
 
-      let temp = pc[i + 1];
-      pc[i + 1] = pc[i];
-      pc[i] = temp;
+      const temp = cloneOfCurrent[step];
+      cloneOfCurrent[step] = cloneOfCurrent[zeroPosition];
+      cloneOfCurrent[zeroPosition] = temp;
 
-      let node: NodePuzzle8 = new NodePuzzle8(pc);
-      this.children.push(node);
+      const node = new NodePuzzle8(cloneOfCurrent, this.finalState);
       node.parent = this;
-    }
-  }
-
-  moveToL(p: number[], i: number) {
-    if (i % this.col > 0) {
-      let pc: number[] = [];
-      this.copy(pc, p);
-
-      let temp = pc[i - 1];
-      pc[i - 1] = pc[i];
-      pc[i] = temp;
-
-      let node: NodePuzzle8 = new NodePuzzle8(pc);
       this.children.push(node);
-      node.parent = this;
-    }
-  }
-
-  moveToUp(p: number[], i: number) {
-    if (i - this.col >= 0) {
-      let pc: number[] = [];
-      this.copy(pc, p);
-
-      let temp = pc[i - 3];
-      pc[i - 3] = pc[i];
-      pc[i] = temp;
-
-      let node: NodePuzzle8 = new NodePuzzle8(pc);
-      this.children.push(node);
-      node.parent = this;
-    }
-  }
-
-  moveToDown(p: number[], i: number) {
-    if (i + this.col < this.puzzle.length) {
-      let pc: number[] = [];
-      this.copy(pc, p);
-
-      let temp = pc[i + 3];
-      pc[i + 3] = pc[i];
-      pc[i] = temp;
-
-      let node: NodePuzzle8 = new NodePuzzle8(pc);
-      this.children.push(node);
-      node.parent = this;
     }
   }
 }
