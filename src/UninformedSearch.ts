@@ -10,45 +10,41 @@ export class UninformedSearch {
     path: Array<NodeA>;
     generatedNodes: Array<NodeA>;
   } {
-    let path: Array<NodeA> = new Array();
-    let open: Array<NodeA> = new Array();
-    let closed: Array<NodeA> = new Array();
+    let path: NodeA[] = [];
+    let openList: NodeA[] = [];
+    let closedList: NodeA[] = [];
 
     //
     rootNode.id = this.autoID++;
-    open.push(rootNode);
-    let goal = false;
+    openList.push(rootNode);
 
-    while (open.length > 0 && !goal) {
-      const current = open[0];
-      closed.push(current);
-      open.shift();
+    while (openList.length > 0) {
+      const currentNode = openList[0];
+      closedList.push(currentNode);
+      openList.shift();
 
-      current.expandMove();
+      currentNode.expandMove();
 
-      if (this.findChildrenNodes(current, open) != undefined) {
-        goal = true;
+      const potentialNode = currentNode.children.find(childNode => {
+        childNode.id = this.autoID++;
+        if (childNode.goalState()) {
+          return true;
+        } else {
+          openList.push(childNode);
+          return false;
+        }
+      });
+
+      if (potentialNode) {
+        path = this.getPath(potentialNode);
+        break;
       }
     }
 
     return {
       path,
-      generatedNodes: [...open, ...closed]
+      generatedNodes: [...openList, ...closedList]
     };
-  }
-
-  findChildrenNodes(currentNode: NodeA, openList: NodeA[], index = 0) {
-    if (index < currentNode.children.length) {
-      const currentChild = currentNode.children[index];
-      if (currentChild.goalState())
-        return currentChild;
-      else {
-        openList.push(currentChild);
-        this.findChildrenNodes(currentNode, openList, index + 1)
-      }
-    } else {
-      return;
-    }
   }
 
   getPath(initialNode: NodeA, path: NodeA[] = []): NodeA[] {
