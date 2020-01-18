@@ -2,11 +2,10 @@ import { NodeA } from "./Node";
 
 export class UninformedSearch {
   autoID: number = 1;
-  constructor() { }
 
-  bfs(
-    rootNode: NodeA
-  ): {
+  constructor(private initialNode: NodeA) { }
+
+  bfs(): {
     path: Array<NodeA>;
     generatedNodes: Array<NodeA>;
   } {
@@ -15,8 +14,8 @@ export class UninformedSearch {
     let closedList: NodeA[] = [];
 
     //
-    rootNode.id = this.autoID++;
-    openList.push(rootNode);
+    this.initialNode.id = this.autoID++;
+    openList.push(this.initialNode);
 
     while (openList.length > 0) {
       const currentNode = openList[0];

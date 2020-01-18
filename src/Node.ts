@@ -10,7 +10,7 @@ export abstract class NodeA {
 
   abstract isSame(node: NodeA): boolean;
 
-  abstract copy(thingA: any, thingB: any): void;
+  abstract clone(currentState: any): void;
 
   abstract goalState(): boolean;
 

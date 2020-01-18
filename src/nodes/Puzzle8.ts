@@ -4,7 +4,7 @@ export class NodePuzzle8 extends NodeA {
   // properties of this especific node
   currentState: number[] = [];
   zeroPosition: number = 0;
-  col: number = 3;
+  readonly col: number = 3;
 
   constructor(initialState: number[], private finalState: number[]) {
     super();
@@ -43,9 +43,8 @@ export class NodePuzzle8 extends NodeA {
     this.changeZeroPosition(p, canMoveToD, i + 3, i);
   }
 
-
-  copy(a: any, b: any): void {
-    for (let i = 0; i < b.length; i++) a[i] = b[i];
+  clone(a: number[]): number[] {
+    return [...a];
   }
 
   printNode(): void {
@@ -55,9 +54,9 @@ export class NodePuzzle8 extends NodeA {
   isSame(p: NodeA): boolean {
     let same = true;
 
-    for (let index = 0; index < (p as NodePuzzle8).currentState.length; index++) {
+    for (let index = 0; index < (p as NodePuzzle8).currentState.length; index++)
       if (this.currentState[index] != (p as NodePuzzle8).currentState[index]) same = false;
-    }
+
     return same;
   }
 
@@ -83,8 +82,7 @@ export class NodePuzzle8 extends NodeA {
 
   changeZeroPosition(currentPuzzle: number[], condition: boolean, step: number, zeroPosition: number) {
     if (condition) {
-      const cloneOfCurrent: number[] = [];
-      this.copy(cloneOfCurrent, currentPuzzle);
+      const cloneOfCurrent = this.clone(currentPuzzle);
 
       const temp = cloneOfCurrent[step];
       cloneOfCurrent[step] = cloneOfCurrent[zeroPosition];
