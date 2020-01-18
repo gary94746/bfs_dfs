@@ -3,8 +3,9 @@ import * as _ from "lodash";
 
 export class NodePuzzle8 extends NodeA {
   // properties of this especific node
-  zeroPosition: number = 0;
   readonly col: number = 3;
+
+  zeroPosition: number = 0;
   canMoveToRight: boolean;
   canMoveToLeft: boolean;
   canMoveToDown: boolean;
@@ -29,13 +30,17 @@ export class NodePuzzle8 extends NodeA {
     const toDown = same(3, this.canMoveToDown);
     const toUp = same(-3, this.canMoveToUp);
 
-    [toR, toL, toDown, toUp].forEach(e => {
+    this.addChilds(toR, toL, toDown, toUp);
+  }
+
+  addChilds(...potentialChilds: number[][]) {
+    potentialChilds.forEach(e => {
       if (e.length > 0) {
         const newChild = new NodePuzzle8(e, this.finalState);
         newChild.parent = this;
         this.children.push(newChild);
       }
-    });
+    })
   }
 
   printNode(): void {
@@ -43,12 +48,7 @@ export class NodePuzzle8 extends NodeA {
   }
 
   isSame(p: NodeA): boolean {
-    let same = true;
-
-    for (let index = 0; index < (p as NodePuzzle8).currentState.length; index++)
-      if (this.currentState[index] != (p as NodePuzzle8).currentState[index]) same = false;
-
-    return same;
+    return JSON.stringify(p) === JSON.stringify(this.currentState);
   }
 
   goalState(): boolean {
