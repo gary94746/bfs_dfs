@@ -2,13 +2,11 @@ import { NodeA } from "../Node";
 
 export class NodePuzzle8 extends NodeA {
   // properties of this especific node
-  currentState: number[] = [];
   zeroPosition: number = 0;
   readonly col: number = 3;
 
-  constructor(initialState: number[], private finalState: number[]) {
+  constructor(private currentState: number[], private finalState: number[]) {
     super();
-    this.setPuzzle(initialState);
   }
 
   expandMove(): void {
@@ -74,10 +72,6 @@ export class NodePuzzle8 extends NodeA {
 
   getRawName(): string {
     return JSON.stringify(this.currentState);
-  }
-
-  setPuzzle(p: number[]) {
-    for (let i = 0; i < p.length; i++) this.currentState[i] = p[i];
   }
 
   changeZeroPosition(currentPuzzle: number[], condition: boolean, step: number, zeroPosition: number) {
