@@ -9,9 +9,9 @@ export class UninformedSearch {
     path: Array<NodeA>;
     generatedNodes: Array<NodeA>;
   } {
-    let path: NodeA[] = [];
-    let openList: NodeA[] = [];
-    let closedList: NodeA[] = [];
+    const path: NodeA[] = [];
+    const openList: NodeA[] = [];
+    const closedList: NodeA[] = [];
 
     //
     this.initialNode.id = this.autoID++;
@@ -27,6 +27,7 @@ export class UninformedSearch {
       const potentialNode = currentNode.children.find(childNode => {
         childNode.id = this.autoID++;
         if (childNode.goalState()) {
+          openList.push(childNode);
           return true;
         } else {
           openList.push(childNode);
@@ -35,7 +36,7 @@ export class UninformedSearch {
       });
 
       if (potentialNode) {
-        path = this.getPath(potentialNode);
+        path.push(...this.getPath(potentialNode));
         break;
       }
     }

@@ -5,25 +5,16 @@ import { NodePuzzle8 } from "./nodes/Puzzle8";
 import { parseData, ForGraph } from "./ExportData";
 import { NodeA } from "./Node";
 
-const readFromFile = (path: string) => {
-  return JSON.parse(
-    fs.readFileSync(path, "utf-8")
-  );
-}
+const readFromFile = (path: string) => JSON.parse(fs.readFileSync(path, "utf-8"));
 
-const writeToFile = (path: string, data: ForGraph[]) => {
-  fs.writeFileSync(path, JSON.stringify(data));
-}
+const writeToFile = (path: string, data: ForGraph[]) => fs.writeFileSync(path, JSON.stringify(data));
 
-const printPath = (path: NodeA[]) => {
-  path.reverse().forEach(e => e.printNode());
-}
+const printPath = (path: NodeA[]) => path.reverse().forEach(e => e.printNode());
 
-const exportData = (generatedNodes: NodeA[], initialElement: NodeA, path: NodeA[]) => {
-  const exported = parseData([...generatedNodes, initialElement], path)
+const exportData = (generatedNodes: NodeA[], path: NodeA[]) => {
+  const exported = parseData([...generatedNodes], path)
   writeToFile("out.json", exported);
 }
-
 
 const { initialState, finalState } = readFromFile("input.json");
 const root = new NodePuzzle8(initialState, finalState);
@@ -32,4 +23,4 @@ const { path, generatedNodes } = ui.bfs();
 
 
 printPath(path);
-exportData(generatedNodes, path[0], path);
+exportData(generatedNodes, path);

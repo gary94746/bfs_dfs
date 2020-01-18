@@ -2,7 +2,6 @@ import { NodeA } from "../Node";
 import * as _ from "lodash";
 
 export class NodePuzzle8 extends NodeA {
-  // properties of this especific node
   readonly col: number = 3;
 
   zeroPosition: number = 0;
