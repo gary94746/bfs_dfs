@@ -23,12 +23,12 @@ export class NodePuzzle8 extends NodeA {
   expandMove(): void {
     const same = this.changeZeroPosition(this.currentState, this.zeroPosition);
 
-    const toR = same(1, this.canMoveToRight);
-    const toL = same(-1, this.canMoveToLeft);
+    const toRight = same(1, this.canMoveToRight);
+    const toLeft = same(-1, this.canMoveToLeft);
     const toDown = same(3, this.canMoveToDown);
     const toUp = same(-3, this.canMoveToUp);
 
-    this.addChilds(toR, toL, toDown, toUp);
+    this.addChilds(toRight, toLeft, toDown, toUp);
   }
 
   addChilds(...potentialChilds: number[][]) {
