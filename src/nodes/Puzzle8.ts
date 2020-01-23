@@ -69,12 +69,9 @@ export class NodePuzzle8 extends NodeA {
   changeZeroPosition(currentPuzzle: number[], zeroPosition: number) {
     return (step: number, condition: boolean, stepSize = zeroPosition + step) => {
       if (condition) {
-        const cloneOfCurrent = [...currentPuzzle];
-        const temp = cloneOfCurrent[stepSize];
-        cloneOfCurrent[stepSize] = cloneOfCurrent[zeroPosition];
-        cloneOfCurrent[zeroPosition] = temp;
-
-        return cloneOfCurrent;
+        const clone = [...currentPuzzle];
+        [clone[stepSize], clone[zeroPosition]] = [clone[zeroPosition], clone[stepSize]];
+        return clone;
       } else {
         return [];
       }
