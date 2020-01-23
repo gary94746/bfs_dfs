@@ -1,5 +1,4 @@
 import { NodeA } from "../Node";
-import * as _ from "lodash";
 
 export class NodePuzzle8 extends NodeA {
   readonly col: number = 3;
@@ -22,7 +21,7 @@ export class NodePuzzle8 extends NodeA {
   }
 
   expandMove(): void {
-    const same = this.change(this.currentState, this.zeroPosition);
+    const same = this.changeZeroPosition(this.currentState, this.zeroPosition);
 
     const toR = same(1, this.canMoveToRight);
     const toL = same(-1, this.canMoveToLeft);
@@ -55,18 +54,19 @@ export class NodePuzzle8 extends NodeA {
   }
 
   getName(): string {
-    return `
-    ${this.currentState[0]} ${this.currentState[1]} ${this.currentState[2]}
-    ${this.currentState[3]} ${this.currentState[4]} ${this.currentState[5]}
-    ${this.currentState[6]} ${this.currentState[7]} ${this.currentState[8]}
-    `;
+    return this.currentState.map((value, index) => {
+      if (index % 3 == 2)
+        return value + "\n";
+      else
+        return value + " ";
+    }).reduce((x, c) => x + c);
   }
 
   getRawName(): string {
     return JSON.stringify(this.currentState);
   }
 
-  change(currentPuzzle: number[], zeroPosition: number) {
+  changeZeroPosition(currentPuzzle: number[], zeroPosition: number) {
     return (step: number, condition: boolean, stepSize = zeroPosition + step) => {
       if (condition) {
         const cloneOfCurrent = [...currentPuzzle];

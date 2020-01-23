@@ -12,14 +12,14 @@ const writeToFile = (path: string, data: ForGraph[]) => fs.writeFileSync(path, J
 const printPath = (path: NodeA[]) => path.reverse().forEach(e => e.printNode());
 
 const exportData = (generatedNodes: NodeA[], path: NodeA[]) => {
-  const exported = parseData([...generatedNodes], path)
+  const exported = parseData(generatedNodes, path);
   writeToFile("out.json", exported);
 }
 
 const { initialState, finalState } = readFromFile("input.json");
 const root = new NodePuzzle8(initialState, finalState);
-const ui = new UninformedSearch(root);
-const { path, generatedNodes } = ui.bfs();
+const result = new UninformedSearch(root);
+const { path, generatedNodes } = result.bfs();
 
 
 printPath(path);
