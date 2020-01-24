@@ -46,7 +46,7 @@ export class NodePuzzle8 extends NodeA {
   }
 
   isSame(p: NodeA): boolean {
-    return JSON.stringify(p) === JSON.stringify(this.currentState);
+    return p.getRawName() === this.getRawName();
   }
 
   goalState(): boolean {
