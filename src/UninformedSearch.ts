@@ -1,9 +1,15 @@
 import { NodeA } from "./Node";
 
 export class UninformedSearch {
-  autoID: number = 1;
 
-  constructor(private initialNode: NodeA) { }
+  constructor(private initialNode: NodeA) {
+  }
+
+  *getId(): IterableIterator<number> {
+    let id = 1;
+    while (true)
+      yield id++;
+  }
 
   bfs(): {
     path: Array<NodeA>;
@@ -14,7 +20,8 @@ export class UninformedSearch {
     const closedList: NodeA[] = [];
 
     //
-    this.initialNode.id = this.autoID++;
+    this.initialNode.id = this.getId().next().value;
+
     openList.push(this.initialNode);
 
     while (openList.length > 0) {
@@ -47,12 +54,41 @@ export class UninformedSearch {
     };
   }
 
+  dfs(deph: number = 20) {
+    const stack: NodeA[] = [];
+    const alrLbl: NodeA[] = [];
+
+    stack.push(this.initialNode);
+
+    while (stack.length > 0) {
+      const currentNode = stack.pop();
+
+      if (currentNode) alrLbl.push(currentNode)
+
+      if (currentNode?.goalState()) {
+        console.log("===============DFS");
+
+        this.getPath(currentNode).forEach(f => f.printNode());
+        break;
+      }
+
+      if (stack.length < deph) {
+        currentNode?.expandMove();
+        currentNode?.children.forEach(f => {
+          if (!alrLbl.find(a => a.isSame(f)))
+            stack.push(f);
+        });
+      }
+
+    }
+  }
+
   getPath(initialNode: NodeA, path: NodeA[] = []): NodeA[] {
     path.push(initialNode);
     if (initialNode.parent != undefined) {
       return this.getPath(initialNode.parent, path);
     } else {
-      return path;
+      return path.reverse();
     }
   }
 
