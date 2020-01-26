@@ -1,11 +1,13 @@
 import { NodeA } from "./Node";
 
 export class UninformedSearch {
+  increment: IterableIterator<number>;
 
   constructor(private initialNode: NodeA) {
+    this.increment = this.getId();
   }
 
-  *getId(): IterableIterator<number> {
+  * getId(): IterableIterator<number> {
     let id = 1;
     while (true)
       yield id++;
@@ -20,7 +22,7 @@ export class UninformedSearch {
     const closedList: NodeA[] = [];
 
     //
-    this.initialNode.id = this.getId().next().value;
+    this.initialNode.id = this.increment.next().value;
 
     openList.push(this.initialNode);
 
@@ -32,7 +34,7 @@ export class UninformedSearch {
       currentNode.expandMove();
 
       const potentialNode = currentNode.children.find(childNode => {
-        childNode.id = this.autoID++;
+        childNode.id = this.increment.next().value;
         if (childNode.goalState()) {
           openList.push(childNode);
           return true;
@@ -54,11 +56,14 @@ export class UninformedSearch {
     };
   }
 
-  dfs(deph: number = 20) {
+  dfs(deph: number = 5) {
     const stack: NodeA[] = [];
     const alrLbl: NodeA[] = [];
+    const path: NodeA[] = [];
 
+    this.initialNode.id = this.increment.next().value;
     stack.push(this.initialNode);
+
 
     while (stack.length > 0) {
       const currentNode = stack.pop();
@@ -66,20 +71,25 @@ export class UninformedSearch {
       if (currentNode) alrLbl.push(currentNode)
 
       if (currentNode?.goalState()) {
-        console.log("===============DFS");
-
-        this.getPath(currentNode).forEach(f => f.printNode());
+        path.push(...this.getPath(currentNode));
         break;
       }
 
       if (stack.length < deph) {
         currentNode?.expandMove();
         currentNode?.children.forEach(f => {
-          if (!alrLbl.find(a => a.isSame(f)))
+          if (!alrLbl.find(a => a.isSame(f))) {
+            f.id = this.increment.next().value;
             stack.push(f);
+          }
         });
       }
 
+    }
+
+    return {
+      generatedNodes: [...alrLbl, ...stack],
+      path: path
     }
   }
 
