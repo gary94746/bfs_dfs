@@ -21,8 +21,8 @@ export class UninformedSearch {
     const openList: NodeA[] = [];
     const closedList: NodeA[] = [];
 
-    //
-    this.initialNode.id = this.increment.next().value;
+    // setup the root id
+    this.initialNode.setId(this.increment.next().value);
 
     openList.push(this.initialNode);
 
@@ -33,8 +33,9 @@ export class UninformedSearch {
 
       currentNode.expandMove();
 
-      const potentialNode = currentNode.children.find(childNode => {
-        childNode.id = this.increment.next().value;
+      const potentialNode = currentNode.getChilds().find(childNode => {
+        childNode.setId(this.increment.next().value);
+
         if (childNode.goalState()) {
           openList.push(childNode);
           return true;
@@ -61,25 +62,32 @@ export class UninformedSearch {
     const alrLbl: NodeA[] = [];
     const path: NodeA[] = [];
 
-    this.initialNode.id = this.increment.next().value;
+    // setup id for root node
+    this.initialNode.setId(this.increment.next().value);
     stack.push(this.initialNode);
 
-
+    // condition
     while (stack.length > 0) {
+      // check current node, pop from the stack
       const currentNode = stack.pop();
 
+      // add to alrLbl []
       if (currentNode) alrLbl.push(currentNode)
 
+      // goal node
       if (currentNode?.goalState()) {
         path.push(...this.getPath(currentNode));
         break;
       }
 
+      // check for the depth
       if (stack.length < deph) {
+        // get childrens
         currentNode?.expandMove();
-        currentNode?.children.forEach(f => {
+
+        currentNode?.getChilds().forEach(f => {
           if (!alrLbl.find(a => a.isSame(f))) {
-            f.id = this.increment.next().value;
+            f.setId(this.increment.next().value);
             stack.push(f);
           }
         });
@@ -93,13 +101,13 @@ export class UninformedSearch {
     }
   }
 
-  getPath(initialNode: NodeA, path: NodeA[] = []): NodeA[] {
-    path.push(initialNode);
-    if (initialNode.parent != undefined) {
-      return this.getPath(initialNode.parent, path);
-    } else {
+  getPath(initialNode: NodeA | undefined, path: NodeA[] = []): NodeA[] {
+    if (initialNode != undefined) path.push(initialNode);
+
+    if (initialNode)
+      return this.getPath(initialNode?.getParent(), path);
+    else
       return path.reverse();
-    }
   }
 
 }

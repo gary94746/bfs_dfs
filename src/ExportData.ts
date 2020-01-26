@@ -4,17 +4,17 @@ export const parseData = (generatedNodes: Array<NodeA>, path: Array<NodeA>) => {
 
   const toExport: ForGraph[] = generatedNodes.map(e => {
     return {
-      id: e.id,
-      parent: e.parent?.id,
+      id: e.getId(),
+      parent: e.getParent()?.getId(),
       name: e.getName()
     };
-  })
+  });
 
   path.forEach(e => {
-    const index = toExport.findIndex(f => f.id == e.id);
+    const index = toExport.findIndex(f => f.id == e.getId());
     if (index != -1)
       toExport[index].cls = "expected";
-  })
+  });
 
   return toExport;
 }

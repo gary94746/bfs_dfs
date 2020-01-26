@@ -77,4 +77,25 @@ export class NodePuzzle8 extends NodeA {
       }
     }
   }
+
+  getChilds(): NodeA[] {
+    return this.children;
+  }
+
+  setParent(parent: NodeA): void {
+    this.parent = parent;
+  }
+
+  getParent(): NodeA | undefined {
+    return this.parent;
+  }
+
+  getId(): number {
+    return this.id;
+  }
+
+  setId(id: number): void {
+    this.id = id;
+  }
+
 }
