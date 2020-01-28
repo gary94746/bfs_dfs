@@ -19,10 +19,7 @@ const exportData = (generatedNodes: NodeA[], path: NodeA[]) => {
 const { initialState, finalState } = readFromFile("input.json");
 const root = new NodePuzzle8(initialState, finalState);
 const result = new UninformedSearch(root);
-// const { path, generatedNodes } = result.bfs();
-const f = result.iddfs(root, 10);
-console.log(f);
+const { path, generatedNodes } = result.bfs();
+// const { generatedNodes, path } = result.iddfs(root, 10);
 
-
-// printPath(path);
-// exportData(generatedNodes, path);
+exportData(generatedNodes, path);

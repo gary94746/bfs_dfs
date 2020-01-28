@@ -57,33 +57,67 @@ export class UninformedSearch {
     };
   }
 
-  iddfs(node: NodeA, maxDepth: number): boolean {
+  iddfs(node: NodeA, maxDepth: number): {
+    generatedNodes: NodeA[],
+    path: NodeA[]
+  } {
+    const arr: NodeA[] = [];
+
     for (let depth = 0; depth <= maxDepth; ++depth) {
-      if (this.dls(node, maxDepth)) {
-        return true;
+      const result = this.dls(node, maxDepth);
+      arr.push(...result.generated);
+
+      if (result.value) {
+        const goal = result.generated[result.generated.length - 1];
+
+        return {
+          generatedNodes: arr,
+          path: this.getPath(goal)
+        };
       }
     }
 
-    return false;
+    return {
+      generatedNodes: [],
+      path: []
+    };
   }
 
-  dls(node: NodeA, deph: number): boolean {
+  dls(node: NodeA, deph: number, nodes: NodeA[] = []): {
+    value: boolean,
+    generated: NodeA[],
+  } {
+
+    node.setId(this.increment.next().value);
+    nodes.push(node);
+
     if (node.goalState()) {
-      this.getPath(node).forEach(e => e.printNode());
-      return true;
+      return {
+        value: true,
+        generated: nodes,
+      };
     }
 
-    if (deph == 0) return false;
+    if (deph == 0) return {
+      value: false,
+      generated: nodes,
+    };
 
     node.expandMove();
 
     for (const nd of node.getChilds()) {
-      if (this.dls(nd, deph - 1)) {
-        return true;
+      if (this.dls(nd, deph - 1, nodes).value) {
+        return {
+          value: true,
+          generated: nodes,
+        };
       }
     }
 
-    return false;
+    return {
+      value: false,
+      generated: [],
+    };
   }
 
   getPath(initialNode: NodeA | undefined, path: NodeA[] = []): NodeA[] {
