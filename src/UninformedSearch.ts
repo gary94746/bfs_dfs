@@ -57,48 +57,33 @@ export class UninformedSearch {
     };
   }
 
-  dfs(deph: number = 5) {
-    const stack: NodeA[] = [];
-    const alrLbl: NodeA[] = [];
-    const path: NodeA[] = [];
-
-    // setup id for root node
-    this.initialNode.setId(this.increment.next().value);
-    stack.push(this.initialNode);
-
-    // condition
-    while (stack.length > 0) {
-      // check current node, pop from the stack
-      const currentNode = stack.pop();
-
-      // add to alrLbl []
-      if (currentNode) alrLbl.push(currentNode)
-
-      // goal node
-      if (currentNode?.goalState()) {
-        path.push(...this.getPath(currentNode));
-        break;
+  iddfs(node: NodeA, maxDepth: number): boolean {
+    for (let depth = 0; depth <= maxDepth; ++depth) {
+      if (this.dls(node, maxDepth)) {
+        return true;
       }
-
-      // check for the depth
-      if (stack.length < deph) {
-        // get childrens
-        currentNode?.expandMove();
-
-        currentNode?.getChilds().forEach(f => {
-          if (!alrLbl.find(a => a.isSame(f))) {
-            f.setId(this.increment.next().value);
-            stack.push(f);
-          }
-        });
-      }
-
     }
 
-    return {
-      generatedNodes: [...alrLbl, ...stack],
-      path: path
+    return false;
+  }
+
+  dls(node: NodeA, deph: number): boolean {
+    if (node.goalState()) {
+      this.getPath(node).forEach(e => e.printNode());
+      return true;
     }
+
+    if (deph == 0) return false;
+
+    node.expandMove();
+
+    for (const nd of node.getChilds()) {
+      if (this.dls(nd, deph - 1)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   getPath(initialNode: NodeA | undefined, path: NodeA[] = []): NodeA[] {
