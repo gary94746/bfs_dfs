@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { UninformedSearch } from "./UninformedSearch";
 import { NodePuzzle8 } from "./nodes/Puzzle8";
 import { NodeA } from "./Node";
-import { printDiagraph } from "./print-data";
+import { diagramTemplate } from "./print-data";
 
 // read from file the input, root and goal nodes
 const readFromFile = (path: string) =>
@@ -27,4 +27,4 @@ const { path: pathDFS, generatedNodes: generatedNodesDFS } = uSearch.iddfs(
   10
 );
 
-printDiagraph(generatedNodesDFS, pathDFS);
+const toWrite = diagramTemplate(generatedNodesDFS, pathDFS);

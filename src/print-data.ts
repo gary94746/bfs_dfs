@@ -1,7 +1,8 @@
 import { NodeA } from "./Node";
 
-export const printDiagraph = (generatedNodes: NodeA[], path: NodeA[]) => {
-  console.log("digraph D {");
+export const diagramTemplate = (generatedNodes: NodeA[], path: NodeA[]) => {
+  let exportedString = "";
+  exportedString += "digraph D {\n";
 
   generatedNodes.forEach((node) => {
     // join all the childs, separed by ,
@@ -16,28 +17,26 @@ export const printDiagraph = (generatedNodes: NodeA[], path: NodeA[]) => {
 
     // if is in path changes style
     if (finded) {
-      console.log(
-        `${node.getId()} [label = "${node.getName()}" fillcolor="#ffbb33" style=filled shape=diamond]`
-      );
+      exportedString += `${node.getId()} [label = "${node.getName()}" fillcolor="#ffbb33" style=filled shape=diamond]\n`;
     } else {
-      console.log(`${node.getId()} [label = "${node.getName()}"]`);
+      exportedString += `${node.getId()} [label = "${node.getName()}"]\n`;
     }
 
     if (childs.length > 0) {
       // print the relation if exists
-      console.log(`${node.getId()}->{${childs}} `);
+      exportedString += `${node.getId()}->{${childs}}\n`;
     }
   });
 
   // new lines to remark the solved path
   path.forEach((node, index) => {
     if (index < path.length - 1)
-      console.log(
-        `${node.getId()}->{${path[
-          index + 1
-        ].getId()}} [penwidth=5, arrowhead=dot]`
-      );
+      exportedString += `${node.getId()}->{${path[
+        index + 1
+      ].getId()}} [penwidth=5, arrowhead=dot]\n`;
   });
 
-  console.log("}");
+  exportedString += "}";
+
+  return exportedString;
 };
