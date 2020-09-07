@@ -24,5 +24,4 @@ export abstract class NodeA {
   abstract getId(): number;
 
   abstract setId(id: number): void;
-
 }

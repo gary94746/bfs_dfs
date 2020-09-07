@@ -1,16 +1,15 @@
 import { NodeA } from "./Node";
 
 export class UninformedSearch {
-  increment: IterableIterator<number>;
+  increment: IterableIterator<string>;
 
   constructor(private initialNode: NodeA) {
     this.increment = this.getId();
   }
 
-  * getId(): IterableIterator<number> {
+  *getId(): IterableIterator<string> {
     let id = 1;
-    while (true)
-      yield id++;
+    while (true) yield (id++).toString();
   }
 
   bfs(): {
@@ -33,7 +32,7 @@ export class UninformedSearch {
 
       currentNode.expandMove();
 
-      const potentialNode = currentNode.getChilds().find(childNode => {
+      const potentialNode = currentNode.getChilds().find((childNode) => {
         childNode.setId(this.increment.next().value);
 
         if (childNode.goalState()) {
@@ -53,13 +52,16 @@ export class UninformedSearch {
 
     return {
       path,
-      generatedNodes: [...openList, ...closedList]
+      generatedNodes: [...openList, ...closedList],
     };
   }
 
-  iddfs(node: NodeA, maxDepth: number): {
-    generatedNodes: NodeA[],
-    path: NodeA[]
+  iddfs(
+    node: NodeA,
+    maxDepth: number
+  ): {
+    generatedNodes: NodeA[];
+    path: NodeA[];
   } {
     const arr: NodeA[] = [];
 
@@ -72,22 +74,25 @@ export class UninformedSearch {
 
         return {
           generatedNodes: arr,
-          path: this.getPath(goal)
+          path: this.getPath(goal),
         };
       }
     }
 
     return {
       generatedNodes: [],
-      path: []
+      path: [],
     };
   }
 
-  dls(node: NodeA, deph: number, nodes: NodeA[] = []): {
-    value: boolean,
-    generated: NodeA[],
+  dls(
+    node: NodeA,
+    deph: number,
+    nodes: NodeA[] = []
+  ): {
+    value: boolean;
+    generated: NodeA[];
   } {
-
     node.setId(this.increment.next().value);
     nodes.push(node);
 
@@ -98,10 +103,11 @@ export class UninformedSearch {
       };
     }
 
-    if (deph == 0) return {
-      value: false,
-      generated: nodes,
-    };
+    if (deph == 0)
+      return {
+        value: false,
+        generated: nodes,
+      };
 
     node.expandMove();
 
@@ -123,10 +129,7 @@ export class UninformedSearch {
   getPath(initialNode: NodeA | undefined, path: NodeA[] = []): NodeA[] {
     if (initialNode != undefined) path.push(initialNode);
 
-    if (initialNode)
-      return this.getPath(initialNode?.getParent(), path);
-    else
-      return path.reverse();
+    if (initialNode) return this.getPath(initialNode?.getParent(), path);
+    else return path.reverse();
   }
-
 }

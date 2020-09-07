@@ -2,23 +2,29 @@ import * as fs from "fs";
 
 import { UninformedSearch } from "./UninformedSearch";
 import { NodePuzzle8 } from "./nodes/Puzzle8";
-import { parseData, ForGraph } from "./ExportData";
 import { NodeA } from "./Node";
+import { printDiagraph } from "./print-data";
 
-const readFromFile = (path: string) => JSON.parse(fs.readFileSync(path, "utf-8"));
+// read from file the input, root and goal nodes
+const readFromFile = (path: string) =>
+  JSON.parse(fs.readFileSync(path, "utf-8"));
 
-const writeToFile = (path: string, data: ForGraph[]) => fs.writeFileSync(path, JSON.stringify(data));
+// function to printh path in console
+const printPath = (path: NodeA[]) => path.forEach((e) => e.printNode());
 
-const printPath = (path: NodeA[]) => path.forEach(e => e.printNode());
-
-const exportData = (generatedNodes: NodeA[], path: NodeA[]) => {
-  const exported = parseData(generatedNodes, path);
-  writeToFile("out.json", exported);
-}
-
+// extract initial state and final state from json file
 const { initialState, finalState } = readFromFile("input.json");
-const rootNode = new NodePuzzle8(initialState, finalState);
-const uSearch = new UninformedSearch(rootNode);
-const { path: pathBFS, generatedNodes: generatedNodesBFS } = uSearch.bfs();
-const { path: pathDFS, generatedNodes: generatedNodesDFS } = uSearch.iddfs(rootNode, 10);
 
+// setup node, initial state and goal state
+const rootNode = new NodePuzzle8(initialState, finalState);
+
+const uSearch = new UninformedSearch(rootNode);
+
+// extract generated nodes and path from bfs search
+//const { path: pathBFS, generatedNodes: generatedNodesBFS } = uSearch.bfs();
+const { path: pathDFS, generatedNodes: generatedNodesDFS } = uSearch.iddfs(
+  rootNode,
+  10
+);
+
+printDiagraph(generatedNodesDFS, pathDFS);
