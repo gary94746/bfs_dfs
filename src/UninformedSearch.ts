@@ -172,4 +172,8 @@ export class UninformedSearch {
       return path.reverse();
     }
   }
+
+  printPath(path: NodeA[]) {
+    path.forEach((e) => e.printNode());
+  }
 }
