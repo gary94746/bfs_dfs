@@ -17,7 +17,7 @@ export const diagramTemplate = (generatedNodes: NodeA[], path: NodeA[]) => {
 
     // if is in path changes style
     if (finded) {
-      exportedString += `${node.getId()} [label = "${node.getName()}" fillcolor="#ffbb33" style=filled shape=diamond]\n`;
+      exportedString += `${node.getId()} [label = "${node.getName()}" fillcolor="#ffbb33" style=filled]\n`;
     } else {
       exportedString += `${node.getId()} [label = "${node.getName()}"]\n`;
     }

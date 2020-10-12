@@ -18,8 +18,12 @@ const { path: pathDFS, generatedNodes: generatedNodesDFS } = uSearch.iddfs(
   10
 );
 
+// print path
+uSearch.printPath(pathDFS);
+uSearch.printPath(pathBFS);
+
 const templateDFS = diagramTemplate(generatedNodesDFS, pathDFS);
 const templateBFS = diagramTemplate(generatedNodesBFS, pathBFS);
 
-writeToFile("./dfs", templateDFS);
-writeToFile("./bfs", templateBFS);
+writeToFile("./generated/dfs", templateDFS);
+writeToFile("./generated/bfs", templateBFS);

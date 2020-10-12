@@ -83,21 +83,24 @@ export class UninformedSearch {
     generatedNodes: NodeA[];
     path: NodeA[];
   } {
-    const arr: NodeA[] = [];
+    const generatedNodes: NodeA[] = [];
 
     for (let depth = 0; depth <= maxDepth; ++depth) {
       const isGoalNode = this.dls(node, maxDepth);
 
       // push the generated nodes by dls
-      arr.push(...isGoalNode.generated);
+      generatedNodes.push(...isGoalNode.generated);
 
       // check if the node is the goal node
       if (isGoalNode.value) {
         const goal = isGoalNode.generated[isGoalNode.generated.length - 1];
+        const path = this.getPath(goal);
+
+        path.forEach((e) => generatedNodes.push(...e.getChilds()));
 
         return {
-          generatedNodes: arr,
-          path: this.getPath(goal),
+          generatedNodes,
+          path,
         };
       }
     }
@@ -156,7 +159,7 @@ export class UninformedSearch {
 
     return {
       value: false,
-      generated: [],
+      generated: nodes,
     };
   }
 
