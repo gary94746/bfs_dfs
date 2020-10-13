@@ -31,10 +31,11 @@ The input json file looks lke this
   ]
 ```
 The property initialState and finalState is the puzzle representation, so initialState looks like this
+```txt
 3 | 1 | 2       0 | 1 | 2
 6 | 0 | 4  =>   3 | 4 | 5
 7 | 8 | 5       6 | 7 | 8
-
+```
 
 The path for the solution will be printed in the terminal, also generate the files in dot format to render the three in png image
 
@@ -51,3 +52,12 @@ Also generates the output file in dot friendly to generate the trees, you only n
 chmod +x generate-png.bash
 ./generate-png.bash
 ```
+
+The generated bfs three looks like:
+![Puzzle 8](https://github.com/gary94746/bfs_dfs/blob/master/generated/bfs.png)
+
+And the dfs looks like:
+![Puzzle 8](https://github.com/gary94746/bfs_dfs/blob/master/generated/dfs.png)
+
+
+Also this project, remark the correct path
