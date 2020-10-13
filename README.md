@@ -42,6 +42,7 @@ The path for the solution will be printed in the terminal, also generate the fil
 
 To run this project, only execute the folowing command, automatically transpile the ts code to js, and run it.
 ```bash
+yarn install
 yarn run
 ```
 
